@@ -1,8 +1,6 @@
 const News = require('../models/news');
-
-const createNews = async (news) => {
-    return await News.createNews(news);
-}
+const Match = require('./match');
+const Tour = require('./tour');
 
 const getNewsByMatchId = async (matchId) => {
     return await News.getNewsByMatchId(matchId);
@@ -14,6 +12,14 @@ const getNewsByTourId = async (tourId) => {
 
 const getNewsBySportId = async (sportId) => {
     return await News.getNewsBySportId(sportId);
+}
+
+const createNews = async (news) => {
+    if(!news.matchId) {
+        return await Tour.createNews(news);
+    } else {
+        return await Match.createNews(news);
+    }
 }
 
 module.exports = {

@@ -18,7 +18,6 @@ create table if not exists mydb.tours
     endTime timestamp not null,
     recUpdatedAt timestamp not null default current_timestamp on update current_timestamp,
     createdAt timestamp not null default current_timestamp,
-    index idx_tours_name (name), 
     foreign key (sportId) references sports(id)
 );
 
@@ -36,19 +35,6 @@ create table if not exists mydb.matches
     foreign key (tourId) references tours(id)
 );
 
-create table if not exists mydb.news
-(
-    id int auto_increment not null primary key,
-    title varchar(255) not null,
-    news_description text not null,
-    matchId int not null,
-    tourId int not null,
-    sportId int not null,
-    foreign key (matchId) references matches(id),
-    foreign key (tourId) references tours(id),
-    foreign key (sportId) references sports(id)
-);
-
 -- seed data
 insert ignore into mydb.sports (id, name) values (1, 'Cricket');
 insert ignore into mydb.sports (id, name) values (2, 'Football');
@@ -57,6 +43,11 @@ insert ignore into mydb.tours (id, name, sportId, startTime, endTime) values (1,
 insert ignore into mydb.tours (id, name, sportId, startTime, endTime) values (2, 'India Super League, 2023', 2, '2023-04-21 00:00:00', '2023-06-20 00:00:00');
 insert ignore into mydb.tours (id, name, sportId, startTime, endTime) values (3, 'India Tour of West Indies, 2023', 1, '2023-06-10 00:00:00', '2023-06-29 00:00:00');
 insert ignore into mydb.tours (id, name, sportId, startTime, endTime) values (4, 'English Premier League, 2022', 2, '2022-04-09 00:00:00', '2022-05-30 00:00:00');
+
+insert ignore into mydb.matches (id, name, tourId, format, startTime, endTime) values (1, 'AB vs CD', 1, 'T20', '2023-04-09 18:00:00', '2023-04-09 23:00:00');
+insert ignore into mydb.matches (id, name, tourId, format, startTime, endTime) values (2, 'EF vs GH', 2, 'soccer', '2023-05-09 18:00:00', '2023-05-09 23:00:00');
+insert ignore into mydb.matches (id, name, tourId, format, startTime, endTime) values (3, 'IJ vs KL', 3, 'ODI', '2023-06-09 18:00:00', '2023-06-09 23:00:00');
+insert ignore into mydb.matches (id, name, tourId, format, startTime, endTime) values (4, 'MN vs OP', 4, 'soccer', '2023-07-09 18:00:00', '2023-07-09 23:00:00');
 
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('GT vs RCB', 1, 'T20', '2023-04-09 18:00:00', '2023-04-09 23:00:00');
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('CSK vs MI', 1, 'T20', '2023-04-10 18:00:00', '2021-04-10 23:00:00');
@@ -69,3 +60,28 @@ insert ignore into mydb.matches (name, tourId, format, startTime, endTime) value
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('IND vs WI', 3, 'ODI', '2023-06-12 10:00:00', '2023-06-12 23:00:00');
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('IND vs WI', 3, 'ODI', '2023-06-14 10:00:00', '2023-06-14 23:00:00');
 insert ignore into mydb.matches (name, tourId, format, startTime, endTime) values ('KER vs JFC', 4, 'soccer', '2022-04-09 18:00:00', '2022-04-09 23:00:00');
+
+-- Modifications
+create index idx_tours_name
+on mydb.tours (name);
+
+create table if not exists mydb.news
+(
+    id int auto_increment not null primary key,
+    title varchar(255) not null,
+    news_description text not null,
+    matchId int,
+    tourId int not null,
+    sportId int,
+    foreign key (matchId) references mydb.matches(id),
+    foreign key (tourId) references mydb.tours(id),
+    foreign key (sportId) references mydb.sports(id)
+);
+
+
+-- seed data for mydb.news table
+insert ignore into mydb.news (title, news_description, matchId, tourId, sportId) values ('AB Won', 'AB vs CD', 1, 1, 1);
+insert ignore into mydb.news (title, news_description, matchId, tourId, sportId) values ('GH Won', 'EF vs GH', 2, 2, 2);
+insert ignore into mydb.news (title, news_description, matchId, tourId, sportId) values ('IJ Won', 'IJ vs KL', 3, 3, 1);
+insert ignore into mydb.news (title, news_description, matchId, tourId, sportId) values ('OP Won', 'MN vs OP', 4, 4, 2);
+

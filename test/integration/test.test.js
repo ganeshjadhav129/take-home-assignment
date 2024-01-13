@@ -15,16 +15,14 @@ describe('test cases for all endPoints!!', () => {
   });
 
   it('should create news and return a 200 OK status code', async () => {
+    const matchId = 1;
     const news = {
       title: 'Demo News',
       news_description: 'This is a demo news.',
-      matchId: 1,
-      tourId: 1,
-      sportId: 1
     };
 
     const response = await request(app)
-      .post('/create_news')
+      .post(`/news/create?matchId=${matchId}`)
       .send(news);
 
     expect(response.status).toBe(200);
@@ -32,14 +30,14 @@ describe('test cases for all endPoints!!', () => {
   });
 
   it('should return a 400 Bad Request status code for incomplete data', async () => {
+    const tourId = 1;
     const incompleteNews = {
       title: 'Incomplete News',
-      news_description: 'This news is missing required fields.'
-      // matchId, tourId, and sportId are intentionally missing
+      // news_description is intentionally missing
     };
 
     const response = await request(app)
-      .post('/create_news')
+      .post(`/news/create?matchId=${tourId}`)
       .send(incompleteNews);
 
     expect(response.status).toBe(400);
@@ -59,17 +57,13 @@ describe('test cases for all endPoints!!', () => {
       expect(newsItem).toHaveProperty('id');
       expect(newsItem).toHaveProperty('title');
       expect(newsItem).toHaveProperty('news_description');
-      expect(newsItem).toHaveProperty('matchId');
       expect(newsItem).toHaveProperty('tourId');
-      expect(newsItem).toHaveProperty('sportId');
 
       // Check the type of each property
       expect(typeof newsItem.id).toBe('number');
       expect(typeof newsItem.title).toBe('string');
       expect(typeof newsItem.news_description).toBe('string');
-      expect(typeof newsItem.matchId).toBe('number');
       expect(typeof newsItem.tourId).toBe('number');
-      expect(typeof newsItem.sportId).toBe('number');
     });
 
     expect(response.status).toBe(200);

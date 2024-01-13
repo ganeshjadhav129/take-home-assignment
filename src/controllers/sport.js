@@ -6,10 +6,10 @@ const getAllSportsToursAndMatches = async () => {
     matches.forEach(match => {
         const { sportName, tourName, matchName, matchId, matchFormat, matchStartTime } = match;
         const matchDetails = {
-            "matchName" : matchName,
-            "matchId" : matchId,
-            "matchFormat" : matchFormat,
-            "matchStartTime" : matchStartTime
+            "id" : matchId,
+            "name" : matchName,
+            "format" : matchFormat,
+            "startTime" : matchStartTime
         };
         if (!res[sportName]) {
             res[sportName] = {};
